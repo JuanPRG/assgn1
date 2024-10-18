@@ -14,7 +14,7 @@ const express = require('express');
 const cors = require('cors');
 const MoviesDB = require("./modules/moviesDB.js");
 const db = new MoviesDB();
-const HTTP_PORT = process.env.HTTP_PORT || 3000;
+const port = process.env.port || 3000;
 
 require('dotenv').config(); 
 
@@ -30,8 +30,8 @@ app.listen(PORT, () => {
 
 // Initialize database
 db.initialize(process.env.MONGODB_CONN_STRING).then(()=>{
-    app.listen(HTTP_PORT, ()=>{
-        console.log(`server listening on: ${HTTP_PORT}`);
+    app.listen(port, ()=>{
+        console.log(`server listening on: ${port}`);
     });
 }).catch((err)=>{
     console.log(err);
