@@ -16,7 +16,7 @@ const MoviesDB = require("./modules/moviesDB.js");
 const db = new MoviesDB();
 const port = process.env.port || 3000;
 
-require('dotenv').config(); 
+require('dotenv').config({ path: '.env' }); 
 
 const app = express();
 app.use(cors());
