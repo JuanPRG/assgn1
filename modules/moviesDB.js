@@ -74,7 +74,7 @@ module.exports = class MoviesDB {
   }
 
   getAllMovies(page, perPage, title) {
-    let findBy = title ? { title } : {};
+    let findBy = title ? { title: { $regex: new RegExp(title, 'i') } } : {};
 
     if (+page && +perPage) {
       return this.Movie.find(findBy).sort({ year: +1 }).skip((page - 1) * +perPage).limit(+perPage).exec();
