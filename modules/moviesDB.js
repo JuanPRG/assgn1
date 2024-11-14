@@ -73,15 +73,24 @@ module.exports = class MoviesDB {
     return newMovie;
   }
 
-  getAllMovies(page, perPage, title) {
+ getAllMovies(page, perPage, title) {
+
+    // Use case-insensitive search for title if provided
     let findBy = title ? { title: { $regex: new RegExp(title, 'i') } } : {};
 
-    if (+page && +perPage) {
-      return this.Movie.find(findBy).sort({ year: +1 }).skip((page - 1) * +perPage).limit(+perPage).exec();
+    // Validate page and perPage to be valid positive integers
+    if (!Number.isInteger(+page) || !Number.isInteger(+perPage) || +page <= 0 || +perPage <= 0) {
+        return Promise.reject(new Error('page and perPage query parameters must be valid positive integers'));
     }
 
-    return Promise.reject(new Error('page and perPage query parameters must be valid numbers'));
-  }
+    // Perform the query with pagination and sorting by year (ascending)
+    return this.Movie.find(findBy)
+        .sort({ year: 1 }) // Ascending order
+        .skip((page - 1) * +perPage) // Skip the correct number of documents based on page and perPage
+        .limit(+perPage) // Limit the number of documents per page
+        .exec();
+}
+
 
   getMovieById(id) {
     return this.Movie.findOne({ _id: id }).exec();
